@@ -1,5 +1,7 @@
 // import models
 const User = require('../models/userModel');
+const {errorHandler} = require('../helpers/dbErrHandler');
+const { use } = require('../routes/userRoutes');
 
 
 exports.Signup=(req,res)=>{
@@ -8,9 +10,15 @@ exports.Signup=(req,res)=>{
     user.save((err,user)=>{
         if(err){
             return res.status(400).json({
-                error
+                
+                err:errorHandler(err)
             });
+            
         }
+        //easy way to hide salt and hashed_password in response
+        user.salt=undefined
+        user.hashed_password=undefined
+        
         res.json({
             user
         });

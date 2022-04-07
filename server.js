@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const expressValidator = require("express-validator");
 //.env
 require("dotenv").config();
 
@@ -16,13 +17,15 @@ const port = process.env.PORT || 5000;
 //middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use (cookieParser());
-
-// app.use(express.json());
+// we can use app.use(express.json()) this instead of bodyParser
+app.use(cookieParser());
+app.use(expressValidator())
 
 //connect mongoose with mongoDB Atlas
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    autoIndex: true,
+  })
   .then(() => {
     console.log("connected to mongoDB ");
   })
