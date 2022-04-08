@@ -46,7 +46,7 @@ exports.Login = (req, res) => {
     //generate a token with user id and secret
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     //persist the token as 't' in cookie with expiry date
-    res.cookie("cookie", token, { expire: new Date() + 7200 }); //2 hours
+    res.cookie("token", token, { expire: new Date() + 7200 }); //2 hours
     //return response with user and token to frontend client
     const { _id, name, email, role } = user;
     return res.json({ token, user: { _id, name, email, role } });
@@ -55,12 +55,37 @@ exports.Login = (req, res) => {
 
 // logout controller
 exports.Logout = (req, res) => {
-  res.clearCookie("cookie");
+  res.clearCookie("token");
   res.json({ message: "logout successful" });
 };
 
-exports.requireSignIn = expressJwt({
-  secret: process.env.JWT_SECRET,
-  algorithms: ["RS256"],
-  userProperty: "auth",
-});
+
+//!
+//  exports.requireSignIn = expressJwt({
+//   secret: process.env.JWT_SECRET,
+//   algorithms: ["HS256"], // added later
+//   userProperty: "auth",
+// });
+
+
+//isAuth middleware
+exports.isAuth = (req, res, next) => {
+  let user=req.profile && req.auth && req.profile._id == req.auth._id
+  if (!user) {
+    return res.status(403).json({
+      error: "Access denied",
+    });
+  }
+  next();
+} 
+
+
+//is Admin middleware
+exports.isAdmin = (req, res, next) => {
+  if (req.profile.role === 0) {
+    return res.status(403).json({
+      error: "Admin resource! Access denied",
+    });
+  }
+  next();
+}
