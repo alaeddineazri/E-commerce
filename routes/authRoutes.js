@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router()
 // import from controllers
-const {Signup , Login , Logout } = require('../controllers/userController')
+const {Signup , Login , Logout , requireSignIn } = require('../controllers/authController')
 const {userSignupValidator} = require('../validator')
 
 router.post('/signup',userSignupValidator, Signup)
