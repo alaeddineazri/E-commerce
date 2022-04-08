@@ -59,3 +59,9 @@ exports.Login=(req,res)=>{
     });
 
 }
+
+// logout controller
+exports.Logout=(req,res)=>{
+    res.clearCookie("t");
+    res.json({message:"logout successful"});
+}
