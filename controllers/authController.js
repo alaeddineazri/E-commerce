@@ -2,8 +2,8 @@
 const User = require("../models/userModel");
 //import jsonwebtoken to generate token
 const jwt = require("jsonwebtoken");
-// import expressJwt to verify token authorization
-const expressJwt = require("express-jwt");
+
+
 
 const { errorHandler } = require("../helpers/dbErrHandler");
 
@@ -59,13 +59,6 @@ exports.Logout = (req, res) => {
   res.json({ message: "logout successful" });
 };
 
-
-//!
-//  exports.requireSignIn = expressJwt({
-//   secret: process.env.JWT_SECRET,
-//   algorithms: ["HS256"], // added later
-//   userProperty: "auth",
-// });
 
 
 //isAuth middleware

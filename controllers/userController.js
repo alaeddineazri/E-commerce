@@ -2,6 +2,7 @@
 const User = require("../models/userModel");
 
 
+
 exports.userById = (req, res, next, id) => {
     User.findById(id)
 
@@ -18,3 +19,4 @@ exports.userById = (req, res, next, id) => {
         next();
         });
     }
+

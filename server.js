@@ -12,6 +12,7 @@ require("dotenv").config();
 //import routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes")
 
 
 const app = express();
@@ -40,6 +41,7 @@ mongoose
 //middleware for routes
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
 
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
 
