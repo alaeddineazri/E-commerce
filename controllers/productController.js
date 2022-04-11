@@ -11,9 +11,10 @@ const { errorHandler } = require('../helpers/dbErrHandler')
 
 
 exports.createProduct = (req, res) => {
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
+    const form = formidable({});
     form.parse(req, (err, fields, files) => {
+        console.log("files",files)
+        console.log("fields",fields)
         
         if (err) {
             return res.status(400).json({
@@ -22,7 +23,7 @@ exports.createProduct = (req, res) => {
         }
         let product = new Product(fields);
         if (files.photo) {
-            product.photo.data = fs.readFileSync(files.photo.path);
+            product.photo.data = fs.readFileSync(files.photo.filepath);
             product.photo.contentType = files.photo.type;
         }
 
