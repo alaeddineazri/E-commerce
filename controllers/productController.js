@@ -10,6 +10,9 @@ const fs = require('fs');
 const { errorHandler } = require('../helpers/dbErrHandler')
 
 
+
+
+// create product
 exports.createProduct = (req, res) => {
     const form = formidable({});
     form.parse(req, (err, fields, files) => {
@@ -30,7 +33,7 @@ exports.createProduct = (req, res) => {
         let product = new Product(fields);
         // validation photo size
         if (files.photo) {
-            if (files.photo.size > 1000000) {      //1mb
+            if (files.photo.size > 1000000) {      //1mb  = 1000000 bytes
                 return res.status(400).json({
                     error: "Image should be less than 1mb"
                 })
@@ -52,3 +55,27 @@ exports.createProduct = (req, res) => {
         });
     });
 };
+
+
+//get product by id middleware
+
+
+exports.productById = (req, res, next, id) => {
+    Product.findById(id).exec((err, product) => {
+        if (err || !product) {
+            return res.status(400).json({
+                error: "Product not found"
+            })
+        }
+        req.product = product;
+        next();
+    })
+}
+
+
+
+//get product by id
+exports.getProductById = (req, res) => {
+    req.product.photo = undefined;
+    return res.json(req.product);
+}
