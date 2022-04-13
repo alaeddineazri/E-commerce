@@ -79,3 +79,19 @@ exports.getProductById = (req, res) => {
     req.product.photo = undefined;
     return res.json(req.product);
 }
+
+
+//delete product
+exports.deleteProduct = (req, res) => {
+    let product = req.product;
+    product.remove((err, deletedProduct) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+        res.json({
+            message: "Product deleted successfully"
+        })
+    })
+}
