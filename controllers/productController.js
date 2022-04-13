@@ -95,3 +95,37 @@ exports.deleteProduct = (req, res) => {
         })
     })
 }
+
+//update product
+exports.updateProduct = (req, res) => {
+    let form = formidable({});
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Image could not be uploaded'
+            });
+        }
+        let product = req.product;
+        product = _.extend(product, fields)
+        // validation photo size
+        if (files.photo) {
+            if (files.photo.size > 1000000) {      //1mb  = 1000000 bytes
+                return res.status(400).json({
+                    error: "Image should be less than 1mb"
+                })
+            }
+        }
+        if (files.photo) {
+            product.photo.data = fs.readFileSync(files.photo.filepath);
+            product.photo.contentType = files.photo.mimetype;
+        }
+        product.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(result);
+        });
+    });
+}
