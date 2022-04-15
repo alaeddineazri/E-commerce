@@ -129,3 +129,34 @@ exports.updateProduct = (req, res) => {
         });
     });
 }
+
+
+
+// get all products sort by best selling = /products?sortBy=sold&order=desc&limit=4
+// get all products sort by price high to low = /products?sortBy=price&order=desc&limit=4
+// get all products to low to high = /products?sortBy=price&order=asc&limit=4
+// get all products to high to low = /products?sortBy=price&order=desc&limit=4
+// get all products by arrival = /products?sortBy=createdAt&order=desc&limit=4
+
+exports.getAllProducts = (req, res) => {
+
+    let order = req.query.order ? req.query.order : 'asc';
+    let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+    Product.find()
+        .select("-photo")
+        .populate("category")
+        .sort([[sortBy, order]])
+        .limit(limit)
+        .exec((err, products) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Products not found"
+                })
+            }
+            res.json(products);
+        })
+}   
+
+
