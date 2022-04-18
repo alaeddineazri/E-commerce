@@ -11,6 +11,8 @@ const {
   getAllProducts,
   getProductsRelated,
   getProductByCategory,
+  listCategories,
+  listBySearch,
 } = require("../controllers/productController");
 // import middleware
 const { userById } = require("../controllers/userController");
@@ -50,5 +52,7 @@ router.put(
 router.get("/products", getAllProducts);
 router.get("/products/related/:productId", getProductsRelated);
 router.get("/products/related/", getProductByCategory);
+router.get("/products/categories/", listCategories);
+router.post("/products/by/search", listBySearch);
 
 module.exports = router;
