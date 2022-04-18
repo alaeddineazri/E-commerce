@@ -12,7 +12,6 @@ const categorySchema = new Schema({
         required: true,
         unique: true,
         trim: true,
-        minlength: 4,
         maxlength: 20,
     }
 }, {

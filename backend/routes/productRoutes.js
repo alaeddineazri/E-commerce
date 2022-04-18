@@ -9,6 +9,8 @@ const {
   deleteProduct,
   updateProduct,
   getAllProducts,
+  getProductsRelated,
+  getProductByCategory,
 } = require("../controllers/productController");
 // import middleware
 const { userById } = require("../controllers/userController");
@@ -46,5 +48,7 @@ router.put(
 
 
 router.get("/products", getAllProducts);
+router.get("/products/related/:productId", getProductsRelated);
+router.get("/products/related/", getProductByCategory);
 
 module.exports = router;

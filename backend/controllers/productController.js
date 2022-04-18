@@ -146,7 +146,6 @@ exports.getAllProducts = (req, res) => {
 
     Product.find()
         .select("-photo")
-        .populate("category")
         .sort([[sortBy, order]])
         .limit(limit)
         .exec((err, products) => {
@@ -160,3 +159,36 @@ exports.getAllProducts = (req, res) => {
 }   
 
 
+// find product based on category 
+//only products that has same category will be shown 
+
+exports.getProductsRelated = (req,res) => {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 3;
+    Product.find({ _id: { $ne: req.product }, category: req.product.category })
+    .select("-photo")
+    .limit(limit)
+    // .populate("category", "_id name")
+    .exec((err, products) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Products not found"
+            })
+        }
+        res.json(products);
+    })
+}
+
+
+// get products by category
+exports.getProductByCategory = (req, res) => {
+    Product.find({ category: req.body.category })
+        .select("-photo")
+        .exec((err, products) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Products not found"
+                })
+            }
+            res.json(products);
+        })
+}
